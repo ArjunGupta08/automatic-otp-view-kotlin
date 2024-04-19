@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">automatic otp view</string>
+    <string name="countdownTimer">00:%1$s</string>
 </resources>

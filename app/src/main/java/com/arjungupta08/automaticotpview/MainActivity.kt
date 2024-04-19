@@ -3,12 +3,14 @@ package com.arjungupta08.automaticotpview
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 
@@ -28,6 +30,11 @@ class MainActivity : AppCompatActivity() {
     private val otpET6: EditText
         get() = findViewById(R.id.otpET6)
 
+    private val resendOTP: TextView
+        get() = findViewById(R.id.text_resend_otp)
+    private val countDownTimer: TextView
+        get() = findViewById(R.id.countDownTimer)
+
     private val cardVerifyOTP : CardView
         get() = findViewById(R.id.card_verify_otp)
 
@@ -44,6 +51,24 @@ class MainActivity : AppCompatActivity() {
         otpET6.addTextChangedListener(textWatcher)
 
         showKeyBoard(otpET1)
+
+        resendOTP.setOnClickListener {
+            resendOTP.visibility = View.GONE
+            countDownTimer.visibility = View.VISIBLE
+            val timer = object: CountDownTimer(60000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    countDownTimer.text =
+                        getString(R.string.countdownTimer, "${millisUntilFinished / 1000}")
+//                    sendVerificationCode(phone)
+                }
+
+                override fun onFinish() {
+                    resendOTP.visibility = View.VISIBLE
+                    countDownTimer.visibility = View.GONE
+                }
+            }
+            timer.start()
+        }
 
         cardVerifyOTP.setOnClickListener {
             val otp1 = otpET1.text.toString()
